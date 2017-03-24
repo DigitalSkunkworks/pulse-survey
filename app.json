@@ -1,7 +1,7 @@
 {
   "name": "API.AI Pulse Survey Webhook",
   "description": "API.AI Pulse Survey Webhook",
-  "repository": "https://github.com/liamwba/pulse-survey",
+  "repository": "https://github.com/DigitalSkunkworks/pulse-survey",
   "logo": "http://xvir.github.io/img/apiai.png",
   "keywords": ["api.ai", "natural language"]
 }
