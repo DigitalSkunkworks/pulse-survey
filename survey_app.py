@@ -3,6 +3,7 @@
 #import urllib
 import json
 import os
+from os import environ
 
 from flask import Flask
 from flask import request
@@ -159,10 +160,10 @@ def makeWebhookResult(req):
         "source": "apiai-pulse-survey"
     }
 
-
-#if __name__ == '__main__':
-  #  port = int(os.getenv('PORT', 5000))
-
-  #  print ("Starting app on port %d" % port)
-
-  #  app.run(debug=True, port=port, host='0.0.0.0')
+if __name__ == '__main__':
+    HOST = environ.get('SERVER_HOST', 'localhost')
+    try:
+        PORT = int(environ.get('SERVER_PORT', '5555'))
+    except ValueError:
+        PORT = 5555
+    app.run(HOST, PORT)
