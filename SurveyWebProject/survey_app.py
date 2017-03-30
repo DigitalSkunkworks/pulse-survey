@@ -13,7 +13,8 @@ from flask import make_response
 import sqlite3
 
 # Flask app should start in global layout
-app = Flask(__name__)
+from SurveyWebProject import app
+#app = Flask(__name__)
 
 # Global variables
 global_debug = 'Y'

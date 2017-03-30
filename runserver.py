@@ -3,7 +3,7 @@ This script runs the FlaskWebProject application using a development server.
 """
 
 from os import environ
-from SurveyApp import app
+from SurveyWebProject import app
 
 if __name__ == '__main__':
     HOST = environ.get('SERVER_HOST', 'localhost')
