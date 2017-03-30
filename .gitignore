@@ -1,3 +1,9 @@
+#Pycharm files
+*./idea
+
+#Redundant files
+create_tables.py
+
 # Python cache
 __pycache__/
 *.pyc
