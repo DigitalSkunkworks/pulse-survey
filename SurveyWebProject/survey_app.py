@@ -19,7 +19,7 @@ from SurveyWebProject import app
 # Global variables
 global_debug = 'Y'
 my_dir = os.path.dirname(__file__)
-database = '/home/liamwba/mysite/survey.db'
+database = '\home\site\wwwroot\data\survey.db'
 
 
 # Procedure used to output debug messages to the log
