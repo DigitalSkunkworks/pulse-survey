@@ -13,13 +13,12 @@ from flask import make_response
 import sqlite3
 
 # Flask app should start in global layout
-from SurveyWebProject import app
-#app = Flask(__name__)
+app = Flask(__name__)
 
 # Global variables
 global_debug = 'Y'
 my_dir = os.path.dirname(__file__)
-database = '\home\site\wwwroot\data\survey.db'
+database = 'survey.db'
 
 
 # Procedure used to output debug messages to the log
