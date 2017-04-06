@@ -45,13 +45,13 @@ def create_connection(db_file):
     return None
 
 #Insert data from survey into sqlite database
-def insert_survey_details(name,surname,id_number,role,team,department,account,company):
+def insert_survey_details(unit,area,role,team,department,account,company):
     debug('Inside insert_survey_details') #remove debug
     con = create_connection(database)
     cur = con.cursor()
-    sql = '''INSERT INTO details (first_name, surname, id_num, role, team, department, account, company)
-             VALUES (?,?,?,?,?,?,?,?) '''
-    cur.execute(sql, (name,surname,id_number,role,team,department,account,company,))
+    sql = '''INSERT INTO details (unit, area, role, team, department, account, company)
+             VALUES (?,?,?,?,?,?,?) '''
+    cur.execute(sql, (unit,area,role,team,department,account,company,))
     con.commit()
     con.close()
 
@@ -123,31 +123,28 @@ def webhook():
     return r
 
 #Extact parameters from the input JSON and pass to the insert procedure
-#TODO Add another step to IF statement to cater for the second update
 def makeWebhookResult(req):
 #    if req.get("result").get("action") != "survey.complete":
 #       return {}
     result = req.get("result")
     parameters = result.get("parameters")
     debug(parameters) #remove debug
-    name = parameters.get("name")
-    surname = parameters.get("surname")
+    unit = parameters.get("unit")
+    area = parameters.get("area")
     role = parameters.get("role")
     team = parameters.get("team")
     department = parameters.get("department")
-    id_number = parameters.get("id_number")
     account = parameters.get("account")
     company = parameters.get("company")
-
     if req.get("result").get("action") == "survey.complete":
         debug('UPDATE SQLITE')
         comments = parameters.get("comments")
         update_survey_details(comments,id_number,name)
-        speech = "Thanks for taking the pulse survey, " + name + ". Your responses have been recorded. (API)"
+        speech = "Thanks for taking the pulse survey " + name + ". Your responses have been recorded. (API)"
     else:
         if req.get("result").get("action") == "survey.initial":
             debug("INSERT SQLITE")
-            insert_survey_details(name,surname,id_number,role,team,department,account,company)
+            insert_survey_details(unit,action,role,team,department,account,company)
             response_list = create_list(role,team,department,account,company)
             speech = generate_response(response_list)
         else:
@@ -162,8 +159,8 @@ def makeWebhookResult(req):
     }
 
 #Required for Docker
-    if __name__ == "__main__":
-        app.run(host='0.0.0.0')
+ #   if __name__ == "__main__":
+ #       app.run(host='0.0.0.0')
 
 '''if __name__ == '__main__':
     HOST = environ.get('SERVER_HOST', 'localhost')
