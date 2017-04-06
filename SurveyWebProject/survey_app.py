@@ -56,14 +56,17 @@ def insert_survey_details(unit,area,role,team,department,account,company):
     con.close()
 
 #Update record to append comments
-def update_survey_details(comments,id_number,name):
+def update_survey_details(comments,unit,area,role,team):
     debug('Inside update_survey_details') #remove debug
     con = create_connection(database)
     cur = con.cursor()
     sql = '''UPDATE details SET comments = ?
-             WHERE id_num = ?
-             AND first_name = ? '''
-    cur.execute(sql, (comments,id_number,name,))
+             WHERE unit = ?
+             AND area = ?
+             AND role = ?
+             AND team = ?
+             AND date_created = (select max(date_created) from details)  '''
+    cur.execute(sql, (comments,unit,area,role,team,))
     con.commit()
     con.close()
 

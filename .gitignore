@@ -1,5 +1,6 @@
 #Pycharm files
-*./idea
+.idea/
+./__pycache__/views.py
 
 #Redundant files
 create_tables.py
