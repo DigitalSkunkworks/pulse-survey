@@ -22,6 +22,8 @@ from SurveyWebProject import app
 global_debug = 'Y'
 my_dir = os.path.dirname(__file__)
 database = '\home\site\wwwroot\data\survey.db'
+#database = '/home/liamwba/mysite/survey.db' for debugging on PythonAnywhere
+
 
 
 # Procedure used to output debug messages to the log
@@ -144,12 +146,12 @@ def makeWebhookResult(req):
     if req.get("result").get("action") == "survey.complete":
         debug('UPDATE SQLITE')
         comments = parameters.get("comments")
-        update_survey_details(comments,id_number,name)
-        speech = "Thanks for taking the pulse survey " + name + ". Your responses have been recorded. (API)"
+        update_survey_details(comments,unit,area,role,team)
+        speech = "Thanks for taking the pulse survey. Your responses have been recorded. (API)"
     else:
         if req.get("result").get("action") == "survey.initial":
             debug("INSERT SQLITE")
-            insert_survey_details(unit,action,role,team,department,account,company)
+            insert_survey_details(unit,area,role,team,department,account,company)
             response_list = create_list(role,team,department,account,company)
             speech = generate_response(response_list)
         else:
