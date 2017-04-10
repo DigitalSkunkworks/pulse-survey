@@ -10,7 +10,6 @@ from flask import request
 from flask import make_response
 #from flask import g
 
-import pyodbc
 import sqlite3
 
 # Flask app should start in global layout
@@ -22,15 +21,6 @@ global_debug = 'Y'
 my_dir = os.path.dirname(__file__)
 database = '\home\site\wwwroot\data\survey.db'
 #database = '/home/liamwba/mysite/survey.db' for debugging on PythonAnywhere
-
-#Azure DB
-server = 'lbpsdbserver'
-database = 'lbPulseSurveyDB'
-username = 'lbadmin'
-password = 'Digital123'
-driver = '{ODBC Driver 13 for SQL Server}'
-cnxn = pyodbc.connect('DRIVER='+driver+';PORT=1433;SERVER='+server+';PORT=1443;DATABASE='+database+';UID='+username+';PWD='+ password)
-
 
 
 
@@ -81,13 +71,6 @@ def update_survey_details(comments,unit,area,role,team):
     cur.execute(sql, (comments,unit,area,role,team,))
     con.commit()
     con.close()
-
-#Insert data to Azure DB
-def azure_db_insert():
-    cursor = cnxn.cursor()
-    with cursor.execute("INSERT INTO DETAILS (ROLE) values ('pytest')"):
-        print ('Successfuly Inserted!')
-    cnxn.commit()
 
 #TODO finish csv output
 def survey_details_csv():
