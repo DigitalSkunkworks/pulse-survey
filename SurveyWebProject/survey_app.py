@@ -10,6 +10,8 @@ from flask import request
 from flask import make_response
 #from flask import g
 
+#import pyodbc
+
 import sqlite3
 
 # Flask app should start in global layout
