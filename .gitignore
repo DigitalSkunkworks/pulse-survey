@@ -2,6 +2,9 @@
 .idea/
 ./__pycache__/views.py
 
+#DB details
+azure_db_config.py
+
 #Redundant files
 create_tables.py
 
