@@ -3,9 +3,6 @@
 ./__pycache__/views.py
 .vs/
 
-#DB details
-sql_db_config.ini
-
 #Redundant files
 create_tables.py
 
