@@ -171,7 +171,7 @@ def makeWebhookResult(req):
     else:
         if req.get("result").get("action") == "survey.initial":
             debug("INSERT SQLITE")
-            InsertAzure()
+      #      InsertAzure()
             insert_survey_details(unit,area,role,team,department,account,company)
             response_list = create_list(role,team,department,account,company)
             speech = generate_response(response_list)
