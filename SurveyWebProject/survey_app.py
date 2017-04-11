@@ -10,7 +10,6 @@ from flask import request
 from flask import make_response
 #from flask import g
 
-import pyodbc
 import sqlite3
 
 # Flask app should start in global layout
@@ -22,9 +21,6 @@ global_debug = 'Y'
 my_dir = os.path.dirname(__file__)
 database = '\home\site\wwwroot\data\survey.db'
 #database = '/home/liamwba/mysite/survey.db' for debugging on PythonAnywhere
-
-#Azure DB details
-driver = '{ODBC Driver 13 for SQL Server}'
 
 # Procedure used to output debug messages to the log
 def debug(debugmsg):
