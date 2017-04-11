@@ -56,17 +56,13 @@ def ConnectAzureDB():
     return azcon
 
 
-def InsertAzure():
+def InsertAzure(unit,area,role,team,department,account,company):
     cnxn = ConnectAzureDB()
     crsr = cnxn.cursor()
-    val1 = 'new new api.ai'
-    val2 = 'test from api.ai'
-    sql = """
-    INSERT INTO details (role,team) VALUES (?, ?)
-    """
-    crsr.execute(sql, (val1, val2))
+    sql = """ INSERT INTO details (unit, area, role, team, department, account, company)
+             VALUES (?,?,?,?,?,?,?) """
+    crsr.execute(sql, (unit,area,role,team,department,account,company))
     cnxn.commit()
-    # select here
     crsr.close()
     cnxn.close()
 
