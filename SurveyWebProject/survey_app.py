@@ -13,7 +13,7 @@ from flask import make_response
 import sqlite3
 import pypyodbc
 
-from configparser import ConfigParser
+from ConfigParser import ConfigParser
 
 # Flask app should start in global layout
 from SurveyWebProject import app
@@ -27,7 +27,7 @@ database = '\home\site\wwwroot\data\survey.db'
 
 parser = ConfigParser()
 parser.read('\home\site\wwwroot\sql_db_config.ini')
-driver = parser['sql_details']['driver']
+driver = parser.get('sql_details','driver')
 
 # Procedure used to output debug messages to the log
 def debug(debugmsg):
