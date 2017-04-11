@@ -57,7 +57,7 @@ def ConnectAzureDB():
         'Server=lbpsdbserver.database.windows.net;' +
         'Database=lbPulseSurveyDB;' +
         'Uid=lbadmin;' +
-        'Pwd=Digital123;')
+        'Pwd=xxxx;')
 
     azcon = pypyodbc.connect(conString)
     return azcon
