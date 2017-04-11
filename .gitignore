@@ -1,6 +1,7 @@
 #Pycharm files
 .idea/
 ./__pycache__/views.py
+./vs
 
 #DB details
 azure_db_config.py
