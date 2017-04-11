@@ -4,7 +4,7 @@
 .vs/
 
 #DB details
-azure_db_config.py
+sql_db_config.ini
 
 #Redundant files
 create_tables.py
