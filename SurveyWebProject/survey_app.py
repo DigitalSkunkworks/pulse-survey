@@ -56,12 +56,12 @@ def ConnectAzureDB():
     return azcon
 
 
-def InsertAzure(unit):
+def InsertAzure(unit,area,role,team,department,account,company):
     cnxn = ConnectAzureDB()
     crsr = cnxn.cursor()
-    sql = """ INSERT INTO details (unit)
-             VALUES (?) """
-    crsr.execute(sql, (unit))
+    sql = """ INSERT INTO details (unit, area, role, team, department, account, company)
+             VALUES (?,?,?,?,?,?,?) """
+    crsr.execute(sql, (unit,area,role,team,department,account,company))
     cnxn.commit()
     crsr.close()
     cnxn.close()
@@ -170,7 +170,7 @@ def makeWebhookResult(req):
         if req.get("result").get("action") == "survey.initial":
             debug("INSERT SQLITE")
             insert_survey_details(unit,area,role,team,department,account,company)
-            InsertAzure()
+            InsertAzure(unit,area,role,team,department,account,company)
             response_list = create_list(role,team,department,account,company)
             speech = generate_response(response_list)
         else:
