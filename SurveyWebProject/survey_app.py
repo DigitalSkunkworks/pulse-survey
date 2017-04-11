@@ -12,7 +12,6 @@ from flask import make_response
 
 import pyodbc
 import sqlite3
-import azure_db_config
 
 # Flask app should start in global layout
 from SurveyWebProject import app
