@@ -8,9 +8,11 @@ from os import environ
 from flask import Flask
 from flask import request
 from flask import make_response
+#from flask import g
 
 import pypyodbc
 import sqlite3
+#import azure_db_config
 
 # Flask app should start in global layout
 from SurveyWebProject import app
@@ -21,6 +23,9 @@ global_debug = 'Y'
 my_dir = os.path.dirname(__file__)
 database = '\home\site\wwwroot\data\survey.db'
 #database = '/home/liamwba/mysite/survey.db' for debugging on PythonAnywhere
+
+#Azure DB details
+#driver = '{ODBC Driver 13 for SQL Server}'
 
 # Procedure used to output debug messages to the log
 def debug(debugmsg):
@@ -43,30 +48,6 @@ def create_connection(db_file):
         print(e)
 
     return None
-
-def ConnectAzureDB():
-    azcon = pypyodbc.connect(
-            'Driver={ODBC Driver 13 for SQL Server};' +
-            'Server=lbpsdbserver.database.windows.net;' +
-            #    'Port=5432;' +
-            'Database=lbPulseSurveyDB;' +
-            'Uid=lbadmin;' +
-            'Pwd=Digital123;')
-    return azcon
-
-def InsertAzure():
-    cnxn = ConnectAzureDB()
-    crsr = cnxn.cursor()
-    val1 = 'api.ai'
-    val2 = 'test from api.ai'
-    sql = """
-    INSERT INTO details (role,team) VALUES (?, ?)
-    """
-    crsr.execute(sql, (val1,val2))
-    cnxn.commit()
-    #select here
-    crsr.close()
-    cnxn.close()
 
 #Insert data from survey into sqlite database
 def insert_survey_details(unit,area,role,team,department,account,company):
@@ -171,7 +152,6 @@ def makeWebhookResult(req):
     else:
         if req.get("result").get("action") == "survey.initial":
             debug("INSERT SQLITE")
-      #      InsertAzure()
             insert_survey_details(unit,area,role,team,department,account,company)
             response_list = create_list(role,team,department,account,company)
             speech = generate_response(response_list)
