@@ -26,7 +26,7 @@ database = '\home\site\wwwroot\data\survey.db'
 #database = '/home/liamwba/mysite/survey.db' for debugging on PythonAnywhere
 
 parser = ConfigParser()
-parser.read('\home\site\wwwroot\sql_db_config.ini')
+parser.read('../sql_db_config.ini')
 driver = parser.get('sql_details','driver')
 
 # Procedure used to output debug messages to the log
@@ -52,12 +52,14 @@ def create_connection(db_file):
     return None
 
 def ConnectAzureDB():
-    azcon = pypyodbc.connect(
-        'Driver='+ driver +
+
+    conString = ('Driver='+ driver +
         'Server=lbpsdbserver.database.windows.net;' +
         'Database=lbPulseSurveyDB;' +
         'Uid=lbadmin;' +
         'Pwd=Digital123;')
+
+    azcon = pypyodbc.connect(conString)
     return azcon
 
 
