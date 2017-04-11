@@ -8,7 +8,6 @@ from os import environ
 from flask import Flask
 from flask import request
 from flask import make_response
-#from flask import g
 
 import pypyodbc
 import sqlite3
@@ -22,9 +21,6 @@ global_debug = 'Y'
 my_dir = os.path.dirname(__file__)
 database = '\home\site\wwwroot\data\survey.db'
 #database = '/home/liamwba/mysite/survey.db' for debugging on PythonAnywhere
-
-#Azure DB details
-#driver = '{ODBC Driver 13 for SQL Server}'
 
 # Procedure used to output debug messages to the log
 def debug(debugmsg):
@@ -49,14 +45,14 @@ def create_connection(db_file):
     return None
 
 def ConnectAzureDB():
-    conn = pypyodbc.connect(
+    azcon = pypyodbc.connect(
             'Driver={ODBC Driver 13 for SQL Server};' +
             'Server=lbpsdbserver.database.windows.net;' +
             #    'Port=5432;' +
             'Database=lbPulseSurveyDB;' +
             'Uid=lbadmin;' +
             'Pwd=Digital123;')
-    return conn
+    return azcon
 
 def InsertAzure():
     cnxn = ConnectAzureDB()
