@@ -10,9 +10,9 @@ from flask import request
 from flask import make_response
 #from flask import g
 
-import pyodbc
+import pypyodbc
 import sqlite3
-import azure_db_config
+#import azure_db_config
 
 # Flask app should start in global layout
 from SurveyWebProject import app
@@ -25,7 +25,7 @@ database = '\home\site\wwwroot\data\survey.db'
 #database = '/home/liamwba/mysite/survey.db' for debugging on PythonAnywhere
 
 #Azure DB details
-driver = '{ODBC Driver 13 for SQL Server}'
+#driver = '{ODBC Driver 13 for SQL Server}'
 
 # Procedure used to output debug messages to the log
 def debug(debugmsg):
