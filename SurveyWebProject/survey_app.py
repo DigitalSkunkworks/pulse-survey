@@ -26,8 +26,8 @@ database = '\home\site\wwwroot\data\survey.db'
 #database = '/home/liamwba/mysite/survey.db' for debugging on PythonAnywhere
 
 parser = ConfigParser()
-parser.read('../sql_db_config.ini')
-driver = parser.get('sql_details','driver')
+parser.read('\home\site\wwwroot\sql_db_config.ini')
+driver = parser['sql_details']['driver']
 
 # Procedure used to output debug messages to the log
 def debug(debugmsg):
