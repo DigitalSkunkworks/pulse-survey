@@ -56,12 +56,26 @@ def ConnectAzureDB():
     return azcon
 
 
-def InsertAzure(unit,area,role,team,department,account,company):
+def insertAzure(unit,area,role,team,department,account,company):
     cnxn = ConnectAzureDB()
     crsr = cnxn.cursor()
     sql = """ INSERT INTO details (unit, area, role, team, department, account, company)
              VALUES (?,?,?,?,?,?,?) """
     crsr.execute(sql, (unit,area,role,team,department,account,company))
+    cnxn.commit()
+    crsr.close()
+    cnxn.close()
+
+def updateAzure(comments,unit,area,role,team):
+    cnxn = ConnectAzureDB()
+    crsr = cnxn.cursor()
+    sql = """ UPDATE details SET comments = ?
+             WHERE unit = ?
+             AND area = ?
+             AND role = ?
+             AND team = ?
+             AND date_created = (select max(date_created) from details)   """
+    crsr.execute(sql, (comments,unit,area,role,team))
     cnxn.commit()
     crsr.close()
     cnxn.close()
@@ -164,13 +178,14 @@ def makeWebhookResult(req):
     if req.get("result").get("action") == "survey.complete":
         debug('UPDATE SQLITE')
         comments = parameters.get("comments")
+        updateAzure(comments,unit,area,role,team)
         update_survey_details(comments,unit,area,role,team)
         speech = "Thanks for taking the pulse survey. Your responses have been recorded. (API)"
     else:
         if req.get("result").get("action") == "survey.initial":
             debug("INSERT SQLITE")
             insert_survey_details(unit,area,role,team,department,account,company)
-            InsertAzure(unit,area,role,team,department,account,company)
+            insertAzure(unit,area,role,team,department,account,company)
             response_list = create_list(role,team,department,account,company)
             speech = generate_response(response_list)
         else:
