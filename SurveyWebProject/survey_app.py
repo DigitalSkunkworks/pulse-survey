@@ -13,6 +13,8 @@ from flask import make_response
 import sqlite3
 import pypyodbc
 
+from configparser import ConfigParser
+
 # Flask app should start in global layout
 from SurveyWebProject import app
 #app = Flask(__name__)
@@ -22,6 +24,10 @@ global_debug = 'Y'
 my_dir = os.path.dirname(__file__)
 database = '\home\site\wwwroot\data\survey.db'
 #database = '/home/liamwba/mysite/survey.db' for debugging on PythonAnywhere
+
+parser = ConfigParser()
+parser.read('\home\site\wwwroot\sql_db_config.ini')
+driver = parser.get('sql_details','driver')
 
 # Procedure used to output debug messages to the log
 def debug(debugmsg):
@@ -47,7 +53,7 @@ def create_connection(db_file):
 
 def ConnectAzureDB():
     azcon = pypyodbc.connect(
-        'Driver={ODBC Driver 13 for SQL Server};' +
+        'Driver='+ driver +
         'Server=lbpsdbserver.database.windows.net;' +
         'Database=lbPulseSurveyDB;' +
         'Uid=lbadmin;' +
