@@ -12,6 +12,7 @@ from flask import make_response
 
 import pypyodbc
 import sqlite3
+#import azure_db_config
 
 # Flask app should start in global layout
 from SurveyWebProject import app
@@ -47,30 +48,6 @@ def create_connection(db_file):
         print(e)
 
     return None
-
-def ConnectAzureDB():
-    conn = pypyodbc.connect(
-            'Driver={ODBC Driver 13 for SQL Server};' +
-            'Server=lbpsdbserver.database.windows.net;' +
-            #    'Port=5432;' +
-            'Database=lbPulseSurveyDB;' +
-            'Uid=lbadmin;' +
-            'Pwd=Digital123;')
-    return conn
-
-def InsertAzure():
-    cnxn = ConnectAzureDB()
-    crsr = cnxn.cursor()
-    val1 = 'api.ai'
-    val2 = 'test from api.ai'
-    sql = """
-    INSERT INTO details (role,team) VALUES (?, ?)
-    """
-    crsr.execute(sql, (val1,val2))
-    cnxn.commit()
-    #select here
-    crsr.close()
-    cnxn.close()
 
 #Insert data from survey into sqlite database
 def insert_survey_details(unit,area,role,team,department,account,company):
@@ -175,7 +152,6 @@ def makeWebhookResult(req):
     else:
         if req.get("result").get("action") == "survey.initial":
             debug("INSERT SQLITE")
-            InsertAzure()
             insert_survey_details(unit,area,role,team,department,account,company)
             response_list = create_list(role,team,department,account,company)
             speech = generate_response(response_list)
