@@ -16,7 +16,7 @@ import sqlite3
 import pypyodbc
 
 parser = ConfigParser()
-parser.read('sql_db_config.ini')
+parser.read('\home\site\wwwroot\sql_db_config.ini')
 
 # Flask app should start in global layout
 from SurveyWebProject import app
