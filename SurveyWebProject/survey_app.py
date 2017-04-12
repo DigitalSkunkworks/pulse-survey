@@ -190,7 +190,7 @@ def makeWebhookResult(req):
             insert_survey_details(unit,area,role,team,department,account,company)
             insertAzure(unit,area,role,team,department,account,company)
             response_list = create_list(role,team,department,account,company)
-            speech = 'test'#generate_response(response_list)
+            speech = generate_response(response_list)
         else:
             return{}
 
