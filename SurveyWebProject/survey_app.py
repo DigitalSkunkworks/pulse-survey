@@ -27,7 +27,8 @@ database = '\home\site\wwwroot\data\survey.db'
 
 parser = ConfigParser()
 parser.read('\home\site\wwwroot\sql_db_config.ini')
-driver = parser.get('sql_details','driver')
+#driver = parser.get('sql_details','driver')
+driver = os.environ.get('DRIVER','')
 
 # Procedure used to output debug messages to the log
 def debug(debugmsg):
