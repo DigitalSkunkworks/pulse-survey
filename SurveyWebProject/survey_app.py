@@ -13,8 +13,6 @@ from flask import make_response
 import sqlite3
 import pypyodbc
 
-from ConfigParser import ConfigParser
-
 # Flask app should start in global layout
 from SurveyWebProject import app
 #app = Flask(__name__)
@@ -25,9 +23,6 @@ my_dir = os.path.dirname(__file__)
 database = '\home\site\wwwroot\data\survey.db'
 #database = '/home/liamwba/mysite/survey.db' for debugging on PythonAnywhere
 
-parser = ConfigParser()
-parser.read('\home\site\wwwroot\sql_db_config.ini')
-#driver = parser.get('sql_details','driver')
 driver = os.environ.get('DRIVER','')
 
 # Procedure used to output debug messages to the log
@@ -195,7 +190,7 @@ def makeWebhookResult(req):
             insert_survey_details(unit,area,role,team,department,account,company)
             insertAzure(unit,area,role,team,department,account,company)
             response_list = create_list(role,team,department,account,company)
-            speech = generate_response(response_list)
+            speech = 'test'#generate_response(response_list)
         else:
             return{}
 
