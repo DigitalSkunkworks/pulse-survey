@@ -78,9 +78,6 @@ def insertOtherComment(area):
     cnxn = ConnectAzureDB()
     crsr = cnxn.cursor()
 
-    if area == "":
-        area = 'No value'
-
     sql = """ INSERT INTO misc (comment) VALUES (?) """
     crsr.execute(sql, (area,))
     cnxn.commit()
