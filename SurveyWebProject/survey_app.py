@@ -72,6 +72,16 @@ def insertAzure(unit, area, role, team, department, account, company):
     crsr.close()
     cnxn.close()
 
+def insertRandomAzure(area):
+    cnxn = ConnectAzureDB()
+    crsr = cnxn.cursor()
+    sql = """ INSERT INTO random (comment)
+             VALUES (?) """
+    crsr.execute(sql, (area))
+    cnxn.commit()
+    crsr.close()
+    cnxn.close()
+
 
 def updateAzure(comments, unit, area, role, team):
     cnxn = ConnectAzureDB()
@@ -232,6 +242,7 @@ def makeWebhookResult(req):
                 error_count = checkData(area)
 
                 if error_count == 0:
+                    insertRandomAzure(area)
                     speech = 'Sorry, something has gone wrong. Please start again by refreshing this browser. Review the instructions below for further assistance.'
                 else:
                     return {}
