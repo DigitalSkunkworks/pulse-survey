@@ -56,10 +56,10 @@ def debug(debugmsg):
 
 def ConnectAzureDB():
     conString = ('Driver=' + driver +
-                 'Server=' + server +
-                 'Database=' + database +
-                 'Uid=' + uid +
-                 'Pwd=' + pwd)
+                 'Server=lbpsdbserver.database.windows.net;' +
+                 'Database=lbPulseSurveyDB;' +
+                 'Uid=lbadmin;' +
+                 'Pwd=Digital123;')
 
     azcon = pypyodbc.connect(conString)
     return azcon
