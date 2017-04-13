@@ -98,6 +98,21 @@ def updateAzureDebug():
     cnxn.close()
 
 
+def checkData(area):
+    area_list = list()
+    area_list.extend(['Digital', 'Workplace', 'VoIP', 'DPS', 'Other', 'PSO', 'PSD', 'TSD'])
+
+    area_count = 0
+
+    for x in area_list:
+        if x == area:
+            area_count += 1
+        else:
+            None
+
+            return area_count
+
+
 # Insert data from survey into sqlite database
 """def insert_survey_details(unit,area,role,team,department,account,company):
     debug('Inside insert_survey_details') #remove debug
@@ -203,9 +218,13 @@ def makeWebhookResult(req):
     else:
         if req.get("result").get("action") == "survey.initial":
             debug("INSERT DB")
-            insertAzure(unit, area, role, team, department, account, company)
-            response_list = create_list(role, team, department, account, company)
-            speech = generate_response(response_list)
+            error_count = checkData(area)
+            if error_count == 0:
+                speech = 'Sorry, something has gone wrong. Please start again by refreshing this browser. Review the instructions below for further assistance.'
+            else:
+                insertAzure(unit, area, role, team, department, account, company)
+                response_list = create_list(role, team, department, account, company)
+                speech = generate_response(response_list)
         else:
             return {}
 
