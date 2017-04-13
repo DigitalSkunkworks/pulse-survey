@@ -34,7 +34,7 @@ def debug(debugmsg):
 
 
 # Creates a connection to the SQLITE database
-def create_connection(db_file):
+'''def create_connection(db_file):
     """ create a database connection to the SQLite database
         specified by db_file
     :param db_file: database file
@@ -48,7 +48,7 @@ def create_connection(db_file):
     except sqlite3.Error as e:
         print(e)
 
-    return None
+    return None'''
 
 
 def ConnectAzureDB():
@@ -72,6 +72,7 @@ def insertAzure(unit, area, role, team, department, account, company):
     crsr.close()
     cnxn.close()
 
+
 def insertRandomAzure(area):
     cnxn = ConnectAzureDB()
     crsr = cnxn.cursor()
@@ -79,8 +80,7 @@ def insertRandomAzure(area):
     if area == "":
         area = 'No value'
 
-    sql = """ INSERT INTO misc (comment)
-             VALUES (?) """
+    sql = """ INSERT INTO misc (comment) VALUES (?) """
     crsr.execute(sql, (area))
     cnxn.commit()
     crsr.close()
@@ -225,33 +225,30 @@ def makeWebhookResult(req):
         updateAzure(comments, unit, area, role, team)
         # updateAzureDebug()
         speech = "Thanks for taking the pulse survey. Your responses have been recorded. Please close the browser to exit (API)"
+
+    elif req.get("result").get("action") == "survey.initial":
+        unit = parameters.get("unit")
+        area = parameters.get("area")
+        role = parameters.get("role")
+        team = parameters.get("team")
+        department = parameters.get("department")
+        account = parameters.get("account")
+        company = parameters.get("company")
+
+        insertAzure(unit, area, role, team, department, account, company)
+        response_list = create_list(role, team, department, account, company)
+        speech = generate_response(response_list)
+
+    elif req.get("result").get("action") == "survey.area":
+        area = parameters.get("area")
+        error_count = checkData(area)
+
+        if error_count == 0:
+            insertRandomAzure(area)
+            speech = 'Sorry, something has gone wrong. Please start again by refreshing this browser. Review the instructions below for further assistance.'
+
     else:
-        if req.get("result").get("action") == "survey.initial":
-
-            unit = parameters.get("unit")
-            area = parameters.get("area")
-            role = parameters.get("role")
-            team = parameters.get("team")
-            department = parameters.get("department")
-            account = parameters.get("account")
-            company = parameters.get("company")
-
-            insertAzure(unit, area, role, team, department, account, company)
-            response_list = create_list(role, team, department, account, company)
-            speech = generate_response(response_list)
-
-        else:
-            if req.get("result").get("action") == "survey.area":
-                area = parameters.get("area")
-                error_count = checkData(area)
-
-                if error_count == 0:
-                    insertRandomAzure(area)
-                    speech = 'Sorry, something has gone wrong. Please start again by refreshing this browser. Review the instructions below for further assistance.'
-                else:
-                    return {}
-            else:
-                return {}
+     return {}
 
     return {
         "speech": speech,
@@ -259,11 +256,9 @@ def makeWebhookResult(req):
         # "data": {},
         # "contextOut": [],
         "source": "apiai-pulse-survey"
-    }  # Required for Docker
+    }
 
-
-#   if __name__ == "__main__":
-#       app.run(host='0.0.0.0')
+# Required for Docker  # if __name__ == "__main__":  # app.run(host='0.0.0.0')
 
 '''if __name__ == '__main__':
     HOST = environ.get('SERVER_HOST', 'localhost')
