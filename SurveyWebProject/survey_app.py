@@ -24,10 +24,6 @@ my_dir = os.path.dirname(__file__)
 
 
 driver = os.environ.get('DRIVER', '')
-server = os.environ.get('SERVER', '')
-database = os.environ.get('DATABASE', '')
-uid = os.environ.get('UID', '')
-pwd = os.environ.get('PWD', '')
 
 
 # Procedure used to output debug messages to the log
