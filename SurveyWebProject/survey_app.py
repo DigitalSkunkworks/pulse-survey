@@ -75,7 +75,11 @@ def insertAzure(unit, area, role, team, department, account, company):
 def insertRandomAzure(area):
     cnxn = ConnectAzureDB()
     crsr = cnxn.cursor()
-    sql = """ INSERT INTO random (comment)
+
+    if area == "":
+        area = 'No value'
+
+    sql = """ INSERT INTO misc (comment)
              VALUES (?) """
     crsr.execute(sql, (area))
     cnxn.commit()
