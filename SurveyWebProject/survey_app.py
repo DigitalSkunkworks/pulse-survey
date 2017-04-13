@@ -241,8 +241,7 @@ def makeWebhookResult(req):
 
     elif req.get("result").get("action") == "survey.area":
         area = parameters.get("area")
-        error_count = 1#checkData(area)
-        speech = 'liam test'
+        error_count = checkData(area)
         if error_count == 0:
             speech = 'Sorry, something has gone wrong. Please start again by refreshing this browser. Review the instructions below for further assistance.'
             insertOtherComment(area)
