@@ -110,7 +110,7 @@ def checkData(area):
         else:
             None
 
-            return area_count
+    return area_count
 
 
 # Insert data from survey into sqlite database
