@@ -210,7 +210,7 @@ def makeWebhookResult(req):
         comments = parameters.get("comments")
         updateAzure(comments, unit, area, role, team)
         # updateAzureDebug()
-        speech = "Thanks for taking the pulse survey. Your responses have been recorded. (API)"
+        speech = "Thanks for taking the pulse survey. Your responses have been recorded. Please close the browser to exit (API)"
     else:
         if req.get("result").get("action") == "survey.initial":
 
@@ -222,14 +222,10 @@ def makeWebhookResult(req):
             account = parameters.get("account")
             company = parameters.get("company")
 
-            error_count = checkData(area)
+            insertAzure(unit, area, role, team, department, account, company)
+            response_list = create_list(role, team, department, account, company)
+            speech = generate_response(response_list)
 
-            if error_count < 1:
-                speech = 'Sorry, something has gone wrong. Please start again by refreshing this browser. Review the instructions below for further assistance.'
-            else:
-                insertAzure(unit, area, role, team, department, account, company)
-                response_list = create_list(role, team, department, account, company)
-                speech = generate_response(response_list)
         else:
             if req.get("result").get("action") == "survey.area":
                 area = parameters.get("area")
