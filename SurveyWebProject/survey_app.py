@@ -135,6 +135,7 @@ def generate_response(response_list):
     better_count = 0
     same_count = 0
     worse_count = 0
+    error_count = 0
     for x in response_list:
         if x == 'Better':
             better_count += 1
@@ -142,14 +143,18 @@ def generate_response(response_list):
             if x == 'Same':
                 same_count += 1
             else:
-                # if x == 'Worse':
-                worse_count += 1
+                if x == 'Worse':
+                    worse_count += 1
+                else:
+                    error_count += 1
 
     if better_count >= 3:
         speech = "We're pleased that you feel better overall, could you let us know why? (Press enter to submit)"
     else:
         if worse_count >= 3:
             speech = "We've noticed that you feel worse overall, could you let us know why? (Press enter to submit)"
+            if error_count > 1:
+                speech = 'Sorry, something has gone wrong. Please start again by refreshing this browser. Review the instructions below for further assistance.'
         else:
             speech = 'Please enter any other comments (Press enter to submit)'
 
@@ -192,8 +197,8 @@ def makeWebhookResult(req):
     if req.get("result").get("action") == "survey.complete":
         debug('UPDATE DB')
         comments = parameters.get("comments")
-        updateAzure(comments,unit,area,role,team)
-       # updateAzureDebug()
+        updateAzure(comments, unit, area, role, team)
+        # updateAzureDebug()
         speech = "Thanks for taking the pulse survey. Your responses have been recorded. (API)"
     else:
         if req.get("result").get("action") == "survey.initial":
