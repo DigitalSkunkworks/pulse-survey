@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#import urllib
+# import urllib
 import json
 import os
 from os import environ
@@ -8,27 +8,30 @@ from os import environ
 from flask import Flask
 from flask import request
 from flask import make_response
-#from flask import g
+# from flask import g
 
 import sqlite3
 import pypyodbc
 
 # Flask app should start in global layout
 from SurveyWebProject import app
-#app = Flask(__name__)
+
+# app = Flask(__name__)
 
 # Global variables
 global_debug = 'Y'
 my_dir = os.path.dirname(__file__)
 database = '\home\site\wwwroot\data\survey.db'
-#database = '/home/liamwba/mysite/survey.db' for debugging on PythonAnywhere
+# database = '/home/liamwba/mysite/survey.db' for debugging on PythonAnywhere
 
-driver = os.environ.get('DRIVER','')
+driver = os.environ.get('DRIVER', '')
+
 
 # Procedure used to output debug messages to the log
 def debug(debugmsg):
     if global_debug is 'Y':
         print(debugmsg)
+
 
 # Creates a connection to the SQLITE database
 def create_connection(db_file):
@@ -47,29 +50,30 @@ def create_connection(db_file):
 
     return None
 
-def ConnectAzureDB():
 
-    conString = ('Driver='+ driver +
-        'Server=lbpsdbserver.database.windows.net;' +
-        'Database=lbPulseSurveyDB;' +
-        'Uid=lbadmin;' +
-        'Pwd=Digital123;')
+def ConnectAzureDB():
+    conString = ('Driver=' + driver +
+                 'Server=lbpsdbserver.database.windows.net;' +
+                 'Database=lbPulseSurveyDB;' +
+                 'Uid=lbadmin;' +
+                 'Pwd=Digital123;')
 
     azcon = pypyodbc.connect(conString)
     return azcon
 
 
-def insertAzure(unit,area,role,team,department,account,company):
+def insertAzure(unit, area, role, team, department, account, company):
     cnxn = ConnectAzureDB()
     crsr = cnxn.cursor()
     sql = """ INSERT INTO details (unit, area, role, team, department, account, company)
              VALUES (?,?,?,?,?,?,?) """
-    crsr.execute(sql, (unit,area,role,team,department,account,company))
+    crsr.execute(sql, (unit, area, role, team, department, account, company))
     cnxn.commit()
     crsr.close()
     cnxn.close()
 
-def updateAzure(comments,unit,area,role,team):
+
+def updateAzure(comments, unit, area, role, team):
     cnxn = ConnectAzureDB()
     crsr = cnxn.cursor()
     sql = """ UPDATE details SET comments = ?
@@ -78,13 +82,24 @@ def updateAzure(comments,unit,area,role,team):
              AND role = ?
              AND team = ?
              AND date_created = (select max(date_created) from details)   """
-    crsr.execute(sql, (comments,unit,area,role,team))
+    crsr.execute(sql, (comments, unit, area, role, team))
     cnxn.commit()
     crsr.close()
     cnxn.close()
 
-#Insert data from survey into sqlite database
-def insert_survey_details(unit,area,role,team,department,account,company):
+
+def updateAzureDebug():
+    cnxn = ConnectAzureDB()
+    crsr = cnxn.cursor()
+    sql = """ UPDATE details SET comments = 'debugTest'   """
+    crsr.execute(sql)
+    cnxn.commit()
+    crsr.close()
+    cnxn.close()
+
+
+# Insert data from survey into sqlite database
+"""def insert_survey_details(unit,area,role,team,department,account,company):
     debug('Inside insert_survey_details') #remove debug
     con = create_connection(database)
     cur = con.cursor()
@@ -107,21 +122,14 @@ def update_survey_details(comments,unit,area,role,team):
              AND date_created = (select max(date_created) from details)  '''
     cur.execute(sql, (comments,unit,area,role,team,))
     con.commit()
-    con.close()
-
-#TODO finish csv output
-def survey_details_csv():
-    test1 = 'testing'
-    test2 = 'testing2'
-    f = open('survey_details.csv', 'a+')
-    f.write(test1 + ',' + test2 + '\n')
-    f.close()
+    con.close()"""
 
 
-def create_list(role,team,department,account,company):
+def create_list(role, team, department, account, company):
     response_list = list()
-    response_list.extend([role,team,department,account,company])
+    response_list.extend([role, team, department, account, company])
     return response_list
+
 
 def generate_response(response_list):
     better_count = 0
@@ -134,8 +142,8 @@ def generate_response(response_list):
             if x == 'Same':
                 same_count += 1
             else:
-               # if x == 'Worse':
-                    worse_count += 1
+                # if x == 'Worse':
+                worse_count += 1
 
     if better_count >= 3:
         speech = "We're pleased that you feel better overall, could you let us know why? (Press enter to submit)"
@@ -145,9 +153,10 @@ def generate_response(response_list):
         else:
             speech = 'Please enter any other comments (Press enter to submit)'
 
-            print (speech)
+            print(speech)
 
     return speech
+
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
@@ -164,13 +173,14 @@ def webhook():
     r.headers['Content-Type'] = 'application/json'
     return r
 
-#Extact parameters from the input JSON and pass to the insert procedure
+
+# Extact parameters from the input JSON and pass to the insert procedure
 def makeWebhookResult(req):
-#    if req.get("result").get("action") != "survey.complete":
-#       return {}
+    #    if req.get("result").get("action") != "survey.complete":
+    #       return {}
     result = req.get("result")
     parameters = result.get("parameters")
-    debug(parameters) #remove debug
+    debug(parameters)  # remove debug
     unit = parameters.get("unit")
     area = parameters.get("area")
     role = parameters.get("role")
@@ -178,33 +188,34 @@ def makeWebhookResult(req):
     department = parameters.get("department")
     account = parameters.get("account")
     company = parameters.get("company")
+
     if req.get("result").get("action") == "survey.complete":
-        debug('UPDATE SQLITE')
+        debug('UPDATE DB')
         comments = parameters.get("comments")
-        updateAzure(comments,unit,area,role,team)
-   #     update_survey_details(comments,unit,area,role,team)
+        #     updateAzure(comments,unit,area,role,team)
+        updateAzureDebug()
         speech = "Thanks for taking the pulse survey. Your responses have been recorded. (API)"
     else:
         if req.get("result").get("action") == "survey.initial":
-            debug("INSERT SQLITE")
-      #      insert_survey_details(unit,area,role,team,department,account,company)
-            insertAzure(unit,area,role,team,department,account,company)
-            response_list = create_list(role,team,department,account,company)
+            debug("INSERT DB")
+            insertAzure(unit, area, role, team, department, account, company)
+            response_list = create_list(role, team, department, account, company)
             speech = generate_response(response_list)
         else:
-            return{}
+            return {}
 
     return {
         "speech": speech,
         "displayText": speech,
-        #"data": {},
+        # "data": {},
         # "contextOut": [],
         "source": "apiai-pulse-survey"
     }
 
-#Required for Docker
- #   if __name__ == "__main__":
- #       app.run(host='0.0.0.0')
+
+# Required for Docker
+#   if __name__ == "__main__":
+#       app.run(host='0.0.0.0')
 
 '''if __name__ == '__main__':
     HOST = environ.get('SERVER_HOST', 'localhost')
