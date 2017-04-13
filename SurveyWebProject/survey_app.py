@@ -21,8 +21,6 @@ from SurveyWebProject import app
 # Global variables
 global_debug = 'Y'
 my_dir = os.path.dirname(__file__)
-database = '\home\site\wwwroot\data\survey.db'
-# database = '/home/liamwba/mysite/survey.db' for debugging on PythonAnywhere
 
 driver = os.environ.get('DRIVER', '')
 server = os.environ.get('SERVER', '')
