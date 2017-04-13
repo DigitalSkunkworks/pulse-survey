@@ -52,7 +52,7 @@ def debug(debugmsg):
 
 
 def ConnectAzureDB():
-    conString = ('Driver=' + driver +
+    conString = ('Driver={ODBC Driver 13 for SQL Server};' +
                  'Server=lbpsdbserver.database.windows.net;' +
                  'Database=lbPulseSurveyDB;' +
                  'Uid=lbadmin;' +
