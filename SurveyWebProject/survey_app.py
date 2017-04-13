@@ -21,8 +21,6 @@ from SurveyWebProject import app
 # Global variables
 global_debug = 'Y'
 my_dir = os.path.dirname(__file__)
-database = '\home\site\wwwroot\data\survey.db'
-# database = '/home/liamwba/mysite/survey.db' for debugging on PythonAnywhere
 
 driver = os.environ.get('DRIVER', '')
 server = os.environ.get('SERVER', '')
@@ -37,7 +35,7 @@ def debug(debugmsg):
         print(debugmsg)
 
 
-# Creates a connection to the SQLITE database
+# Creates a connection to the SQLITE database (REMOVED due to new DB)
 '''def create_connection(db_file):
     """ create a database connection to the SQLite database
         specified by db_file
@@ -55,7 +53,7 @@ def debug(debugmsg):
     return None'''
 
 
-def ConnectAzureDB():
+def ConnectDB():
     conString = ('Driver=' + driver +
                  'Server=' + server +
                  'Database=' + database +
@@ -66,8 +64,8 @@ def ConnectAzureDB():
     return azcon
 
 
-def insertAzure(unit, area, role, team, department, account, company):
-    cnxn = ConnectAzureDB()
+def insertDB(unit, area, role, team, department, account, company):
+    cnxn = ConnectDB()
     crsr = cnxn.cursor()
     sql = """ INSERT INTO details (unit, area, role, team, department, account, company)
              VALUES (?,?,?,?,?,?,?) """
@@ -77,8 +75,8 @@ def insertAzure(unit, area, role, team, department, account, company):
     cnxn.close()
 
 
-def insertOtherComment(area):
-    cnxn = ConnectAzureDB()
+def insertOtherDB(area):
+    cnxn = ConnectDB()
     crsr = cnxn.cursor()
 
     if area == "":
@@ -91,8 +89,8 @@ def insertOtherComment(area):
     cnxn.close()
 
 
-def updateAzure(comments, unit, area, role, team):
-    cnxn = ConnectAzureDB()
+def updateDB(comments, unit, area, role, team):
+    cnxn = ConnectDB()
     crsr = cnxn.cursor()
     sql = """ UPDATE details SET comments = ?
              WHERE unit = ?
@@ -104,17 +102,6 @@ def updateAzure(comments, unit, area, role, team):
     cnxn.commit()
     crsr.close()
     cnxn.close()
-
-
-def updateAzureDebug():
-    cnxn = ConnectAzureDB()
-    crsr = cnxn.cursor()
-    sql = """ UPDATE details SET comments = 'debugTest'   """
-    crsr.execute(sql)
-    cnxn.commit()
-    crsr.close()
-    cnxn.close()
-
 
 def checkData(area):
     area_list = list()
@@ -131,7 +118,7 @@ def checkData(area):
     return area_count
 
 
-# Insert data from survey into sqlite database
+# Insert data from survey into sqlite database (REMOVED due to new DB)
 """def insert_survey_details(unit,area,role,team,department,account,company):
     debug('Inside insert_survey_details') #remove debug
     con = create_connection(database)
@@ -226,8 +213,8 @@ def makeWebhookResult(req):
         role = parameters.get("role")
         team = parameters.get("team")
         comments = parameters.get("comments")
-        updateAzure(comments, unit, area, role, team)
-        # updateAzureDebug()
+        updateDB(comments, unit, area, role, team)
+        # updateDBDebug()
         speech = "Thanks for taking the pulse survey. Your responses have been recorded. Please close the browser to exit (API)"
 
     elif req.get("result").get("action") == "survey.initial":
@@ -239,7 +226,7 @@ def makeWebhookResult(req):
         account = parameters.get("account")
         company = parameters.get("company")
 
-        insertAzure(unit, area, role, team, department, account, company)
+        insertDB(unit, area, role, team, department, account, company)
         response_list = create_list(role, team, department, account, company)
         speech = generate_response(response_list)
 
@@ -248,7 +235,7 @@ def makeWebhookResult(req):
         error_count = checkData(area)
         if error_count == 0:
             speech = 'Sorry, something has gone wrong. Please start again by refreshing this browser. Review the instructions below for further assistance.'
-            insertOtherComment(area)
+            insertOtherDB(area)
         else:
             None
 
