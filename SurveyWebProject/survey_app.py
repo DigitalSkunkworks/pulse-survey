@@ -25,6 +25,10 @@ database = '\home\site\wwwroot\data\survey.db'
 # database = '/home/liamwba/mysite/survey.db' for debugging on PythonAnywhere
 
 driver = os.environ.get('DRIVER', '')
+server = os.environ.get('SERVER', '')
+database = os.environ.get('DATABASE', '')
+uid = os.environ.get('UID', '')
+pwd = os.environ.get('PWD', '')
 
 
 # Procedure used to output debug messages to the log
@@ -52,11 +56,11 @@ def debug(debugmsg):
 
 
 def ConnectAzureDB():
-    conString = ('Driver={ODBC Driver 13 for SQL Server};' +
-                 'Server=lbpsdbserver.database.windows.net;' +
-                 'Database=lbPulseSurveyDB;' +
-                 'Uid=lbadmin;' +
-                 'Pwd=Digital123;')
+    conString = ('Driver=' + driver +
+                 'Server=' + server +
+                 'Database=' + database +
+                 'Uid=' + uid +
+                 'Pwd=' + pwd)
 
     azcon = pypyodbc.connect(conString)
     return azcon
