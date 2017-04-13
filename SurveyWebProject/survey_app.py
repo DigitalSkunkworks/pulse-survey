@@ -192,8 +192,8 @@ def makeWebhookResult(req):
     if req.get("result").get("action") == "survey.complete":
         debug('UPDATE DB')
         comments = parameters.get("comments")
-        #     updateAzure(comments,unit,area,role,team)
-        updateAzureDebug()
+        updateAzure(comments,unit,area,role,team)
+       # updateAzureDebug()
         speech = "Thanks for taking the pulse survey. Your responses have been recorded. (API)"
     else:
         if req.get("result").get("action") == "survey.initial":
