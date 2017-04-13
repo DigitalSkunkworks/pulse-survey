@@ -244,7 +244,7 @@ def makeWebhookResult(req):
         error_count = checkData(area)
 
         if error_count == 0:
-            insertRandomAzure(area)
+         #   insertRandomAzure(area)
             speech = 'Sorry, something has gone wrong. Please start again by refreshing this browser. Review the instructions below for further assistance.'
 
     else:
