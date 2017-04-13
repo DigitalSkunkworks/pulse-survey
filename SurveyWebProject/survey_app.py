@@ -247,7 +247,7 @@ def makeWebhookResult(req):
 
         if error_count == 0:
             speech = 'Sorry, something has gone wrong. Please start again by refreshing this browser. Review the instructions below for further assistance.'
-            insertOtherComment(area)
+           # insertOtherComment(area)
 
     else:
      return {}
