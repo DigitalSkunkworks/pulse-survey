@@ -22,6 +22,7 @@ from SurveyWebProject import app
 global_debug = 'Y'
 my_dir = os.path.dirname(__file__)
 
+
 driver = os.environ.get('DRIVER', '')
 server = os.environ.get('SERVER', '')
 database = os.environ.get('DATABASE', '')
@@ -77,6 +78,9 @@ def insertAzure(unit, area, role, team, department, account, company):
 def insertOtherComment(area):
     cnxn = ConnectAzureDB()
     crsr = cnxn.cursor()
+
+    if area == "":
+        area = 'No value'
 
     sql = """ INSERT INTO misc (comment) VALUES (?) """
     crsr.execute(sql, (area,))
