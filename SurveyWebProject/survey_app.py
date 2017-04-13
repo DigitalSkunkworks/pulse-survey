@@ -181,7 +181,7 @@ def makeWebhookResult(req):
     if req.get("result").get("action") == "survey.complete":
         debug('UPDATE SQLITE')
         comments = parameters.get("comments")
-     #   updateAzure(comments,unit,area,role,team)
+        updateAzure(comments,unit,area,role,team)
    #     update_survey_details(comments,unit,area,role,team)
         speech = "Thanks for taking the pulse survey. Your responses have been recorded. (API)"
     else:
