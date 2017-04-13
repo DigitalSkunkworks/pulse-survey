@@ -200,24 +200,27 @@ def makeWebhookResult(req):
     #       return {}
     result = req.get("result")
     parameters = result.get("parameters")
-    debug(parameters)  # remove debug
-    unit = parameters.get("unit")
-    area = parameters.get("area")
-    role = parameters.get("role")
-    team = parameters.get("team")
-    department = parameters.get("department")
-    account = parameters.get("account")
-    company = parameters.get("company")
 
     if req.get("result").get("action") == "survey.complete":
         debug('UPDATE DB')
+        unit = parameters.get("unit")
+        area = parameters.get("area")
+        role = parameters.get("role")
+        team = parameters.get("team")
         comments = parameters.get("comments")
         updateAzure(comments, unit, area, role, team)
         # updateAzureDebug()
         speech = "Thanks for taking the pulse survey. Your responses have been recorded. (API)"
     else:
         if req.get("result").get("action") == "survey.initial":
-            debug("INSERT DB")
+
+            unit = parameters.get("unit")
+            area = parameters.get("area")
+            role = parameters.get("role")
+            team = parameters.get("team")
+            department = parameters.get("department")
+            account = parameters.get("account")
+            company = parameters.get("company")
 
             error_count = checkData(area)
 
@@ -228,7 +231,16 @@ def makeWebhookResult(req):
                 response_list = create_list(role, team, department, account, company)
                 speech = generate_response(response_list)
         else:
-            return {}
+            if req.get("result").get("action") == "survey.area":
+                area = parameters.get("area")
+                error_count = checkData(area)
+
+                if error_count < 1:
+                    speech = 'Sorry, something has gone wrong. Please start again by refreshing this browser. Review the instructions below for further assistance.'
+                else:
+                    return {}
+            else:
+                return {}
 
     return {
         "speech": speech,
@@ -236,10 +248,9 @@ def makeWebhookResult(req):
         # "data": {},
         # "contextOut": [],
         "source": "apiai-pulse-survey"
-    }
+    }  # Required for Docker
 
 
-# Required for Docker
 #   if __name__ == "__main__":
 #       app.run(host='0.0.0.0')
 
